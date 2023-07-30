@@ -27,6 +27,12 @@ class _PostPageState extends State<PostPage> {
         ),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          postBloc.add(PostAddEvent());
+        },
+        child: const Icon(Icons.add),
+      ),
       body: BlocConsumer<PostBloc, PostState>(
         bloc: postBloc,
         listener: (context, state) {},
@@ -34,29 +40,32 @@ class _PostPageState extends State<PostPage> {
         buildWhen: (previous, current) => current is! PostActionState,
         builder: (context, state) {
           switch (state.runtimeType) {
+            case PostFecthingLoadingState:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             case PostFetchingSuccessful:
               final successState = state as PostFetchingSuccessful;
-              return Container(
-                child: ListView.builder(
-                  itemCount: successState.posts.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      color: Colors.grey.shade200,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Text(
-                            successState.posts[index].title,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          Text(successState.posts[index].body)
-                        ],
-                      ),
-                    );
-                  },
-                ),
+              return ListView.builder(
+                itemCount: successState.posts.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: Colors.grey.shade200,
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          successState.posts[index].title,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Text(successState.posts[index].body)
+                      ],
+                    ),
+                  );
+                },
               );
             default:
               return const SizedBox();

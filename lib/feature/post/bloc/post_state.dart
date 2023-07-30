@@ -7,6 +7,10 @@ abstract class PostActionState extends PostState {}
 
 class PostInitial extends PostState {}
 
+class PostFecthingLoadingState extends PostState {}
+
+class PostFecthingErrorState extends PostState {}
+
 class PostFetchingSuccessful extends PostState {
   final List<PostUiModel> posts;
 
@@ -14,3 +18,7 @@ class PostFetchingSuccessful extends PostState {
     required this.posts,
   });
 }
+
+class PostAdditionSuccessState extends PostActionState {}
+
+class PostAdditionErrorState extends PostActionState {}
